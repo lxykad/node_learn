@@ -8,5 +8,4 @@ class Test {
     console.log('test======'+s)
   }
 }
-
 module.exports = Test;
