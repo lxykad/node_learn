@@ -35,7 +35,7 @@ var studentEntity = new studentModel({
   age: 22
 });
 
-console.log('name========'+studentEntity.name);
+//console.log('name========'+studentEntity.name);
 // console.log('age========'+studentEntity.age)
 
 router.get('/query/:id', function (req, res, next) {
@@ -73,6 +73,20 @@ router.get('/routetest', function fun1(req, res, next) {
         res.end('fun3');
       }
 );
+
+router.get('/process', function fun1(req, res, next) {
+
+        //let strings = process.argv;
+        process.argv.forEach((val, index) => {
+          console.log(`${index}: ${val}`);
+        });
+
+
+        res.json(process.argv.slice(2));
+        //process.exit(1);
+      }
+);
+
 
 router.get('/del', function (req, res, next) {
 
@@ -119,5 +133,14 @@ router.get('/q', function (req, res, next) {
   db.close();
   res.send('q');
 });
+
+//模拟登陆
+router.post('/login', function fun1(req, res, next) {
+
+        let { username, pwd } = req.body;
+
+        res.json({ username, pwd });
+      }
+);
 
 module.exports = router;
