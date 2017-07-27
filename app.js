@@ -18,13 +18,14 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var opt = require('./src/optdb');
 var soup = require('./src/nsoup');
+var wechat = require('./src/wechatconfig')
 
-//微信公共号接入测试
+/*//微信公共号接入测试
 var config = {
   appID: 'wx52e971ef431fdfb2',
   appSecret: 'aV0QEhwy0kqlTqv03KHJo6oBDPPmAIAhh1CateqrnPa',
   token: 'lxykad007'
-}
+}*/
 
 var app = express();
 
@@ -66,7 +67,8 @@ passport.use('local', new LocalStrategy((username, password, done) => {
 
 
 //wechat
-app.use((req, res, next) => {
+app.use(wechat);
+/*app.use((req, res, next) => {
 
   //var {}
   var token = config.token;
@@ -87,7 +89,7 @@ app.use((req, res, next) => {
     res.send('wrong')
   }
 
-})
+})*/
 
 app.use('/', index);
 app.use('/users', users);

@@ -5,6 +5,8 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var test = require('./test');
+var request = require('superagent');
+var WeChat = require('./wechat');
 
 //连接本地数据库
 var uri = 'mongodb://localhost/ApiServer';
@@ -140,6 +142,30 @@ router.post('/login', function fun1(req, res, next) {
         let { username, pwd } = req.body;
 
         res.json({ username, pwd });
+      }
+);
+
+//发送消息
+router.get('/send/wx', function fun1(req, res, next) {
+
+//获取token
+        var url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx576304ee4c15fdf3&secret=a950ccdd19f708a3671135b09ba81c5d';
+        request
+              .get(url)
+              .end((err, data) => {
+                if (err) {
+                  console.log('token=====err')
+                  res.json(err)
+                } else {
+                  console.log('token=====success')
+                  let parse = JSON.parse(data.text);
+
+                  var { access_token, expires_in } = parse;
+                  WeChat.sendAll(parse.access_token);
+                  res.send(parse.access_token);
+                  // res.send(access_token);
+                }
+              })
       }
 );
 
