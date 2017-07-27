@@ -17,9 +17,10 @@ class Wechat {
           .send({
             "filter": {
               "is_to_all": true
+              //    "tag_id":100
             },
             "text": {
-              "content": "本公共号下半年的目标是做一个小白全栈"
+              "content": "liyipeng"
             },
             "msgtype": "text"
           }).end((err, data) => {
@@ -33,6 +34,50 @@ class Wechat {
     })
 
   }
+
+  /**
+   * 获取已创建的标签
+   * https://api.weixin.qq.com/cgi-bin/tags/get?access_token=ACCESS_TOKEN
+   */
+  static getTags(token) {
+    var url = 'https://api.weixin.qq.com/cgi-bin/tags/get?access_token='+token;
+
+    request.get(url)
+          .end((err, data) => {
+            if (err || !data.ok) {
+              console.log('tags======err')
+            } else {
+              let text = data.res.text;
+              let parse = JSON.parse(text);
+              console.log('tags======suc:'+data.res.text)
+            }
+          })
+  }
+
+  /**
+   * 发送模板消息
+   * https://api.weixin.qq.com/cgi-bin/template/api_set_industry?access_token=ACCESS_TOKEN
+   * @param token
+   */
+  static sendTemp(token) {
+    var url = 'https://api.weixin.qq.com/cgi-bin/template/api_set_industry?access_token='+token;
+
+    request.post(url)
+          .send({
+            "industry_id1": "1",
+            "industry_id2": "4"
+          }).end((err, data) => {
+      if (err || !data.ok) {
+        console.log('sendtext======err')
+      } else {
+        let text = data.res.text;
+        let parse = JSON.parse(text);
+        console.log('sendtext======suc:'+data.res.text)
+      }
+    })
+
+  }
+
 
 }
 module.exports = Wechat;

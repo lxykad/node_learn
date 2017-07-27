@@ -149,7 +149,13 @@ router.post('/login', function fun1(req, res, next) {
 router.get('/send/wx', function fun1(req, res, next) {
 
 //获取token
-        var url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx576304ee4c15fdf3&secret=a950ccdd19f708a3671135b09ba81c5d';
+        // 自己号
+        //var url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx576304ee4c15fdf3&secret=a950ccdd19f708a3671135b09ba81c5d';
+        // cm 号
+        // var url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxbbf2f0084de5f06b&secret=8ae497beef56422e94f6a18ddbeee508';
+        //测试账号
+        var url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxa682b40e836e5596&secret=73d18cabc87b71003a53bf03a229e914';
+
         request
               .get(url)
               .end((err, data) => {
@@ -161,7 +167,8 @@ router.get('/send/wx', function fun1(req, res, next) {
                   let parse = JSON.parse(data.text);
 
                   var { access_token, expires_in } = parse;
-                  WeChat.sendAll(parse.access_token);
+                 WeChat.sendAll(parse.access_token);
+                 //  WeChat.getTags(parse.access_token);
                   res.send(parse.access_token);
                   // res.send(access_token);
                 }
