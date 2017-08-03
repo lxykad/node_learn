@@ -18,7 +18,8 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var opt = require('./src/optdb');
 var soup = require('./src/nsoup');
-var wechat = require('./src/wechatconfig')
+var wechat = require('./src/wechatconfig');
+var t1 = require('./src/http');
 
 /*//微信公共号接入测试
 var config = {
@@ -95,6 +96,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/opt', opt);
 app.use('/', soup);
+app.use('/',t1);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
