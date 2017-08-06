@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    //    "start": "node ./bin/www",
     "start": "set NODE_ENV=production&&node bin/www",
     "pm2": "pm2 start bin/www ",
     "run": "set NODE_ENV=development&&nodemon bin/www",
     "test": "set NODE_ENV=test&&echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "body-parser": "~1.17.1",
     "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.0",
@@ -25,6 +25,8 @@
     "express-flash": "0.0.2",
     "express-session": "^1.15.4",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^7.4.1",
+    "koa-jwt": "^3.2.2",
     "method-override": "^2.3.9",
     "mongoose": "^4.11.3",
     "morgan": "^1.8.2",

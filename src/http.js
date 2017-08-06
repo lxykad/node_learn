@@ -4,9 +4,12 @@
  */
 'use strict';
 var express = require('express');
+var jwt = require('jsonwebtoken');
+const Promise = require('bluebird');
 var router = express.Router();
 var mongoose = require('mongoose');
 var config = require('./config/config')
+var app = express();
 
 router.get('/array', function (req, res, next) {
 
@@ -18,9 +21,31 @@ router.get('/array', function (req, res, next) {
     // console.log('item===='+item);
   })
   var port = process.env.PORT || 5000;
-  console.log('port===='+config.port);
-  
 
+  let type = typeof array;
+  // console.log('type====', type);
+  // console.log('env===='+app.get('env'));
+
+  // Promise.map(array, (item) => {
+  //   console.log('item====', item);
+  //   return item;
+  // }).then((data)=>{
+  //   console.log('data====', data);
+  // });
+  var user ={name: 'lxy', age: 22}
+
+  let sign = jwt.sign(user, 'aaa');
+  // console.log('sign====', user);
+
+  // console.log('filename====',__filename);//当前模块的绝对路径
+  // console.log('dirname====',__dirname)//当前文件所在文件夹的绝对路径
+
+
+  /**
+   * process
+   * argv,env,
+   */
+  console.log('arch=====',process.arch)
 
   res.json('0');
 });
