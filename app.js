@@ -1,4 +1,5 @@
 var express = require('express');
+var Promise = require('bluebird');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -35,9 +36,12 @@ var app = express();
 
 //连接本地数据库
 var uri = 'mongodb://localhost/ApiServer';
-var db =  mongoose.connect(uri, {
-    useMongoClient: true
+var db = mongoose.connect(uri, {
+  useMongoClient: true,
+  promiseLibrary: global.Promise
+
 });
+//mongoose.Promise = Promise;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -77,7 +81,7 @@ app.use('/users', users);
 app.use('/opt', opt);
 app.use('/', soup);
 app.use('/', t1);
-app.use('/blog',blog);
+app.use('/blog', blog);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -94,7 +98,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json(err);
 });
 
 module.exports = app;

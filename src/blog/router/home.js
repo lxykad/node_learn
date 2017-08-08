@@ -4,6 +4,7 @@
  */
 'use strict';
 var express = require('express');
+var Promise = require('bluebird');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var app = express();
@@ -110,6 +111,107 @@ router.post('/login', (req, res, next) => {
         }).then((data) => res.json(Object.assign(data.toObject(), responseData)));
 
 });
+
+/**
+ * 数据库查询所有已注册用户
+ */
+router.get('/all/users', (req, res, next) => {
+
+  /* //查询所有
+   UserModel.find()
+   .then((users) => {
+   res.send(users)
+   });*/
+
+  var { page = 0, perPage = 2 } = req.query;
+
+  /**
+   * 分页处理
+   * 第一页page == 0
+   * limit(number)
+   * skip(num):忽略前两条，从第三条开始取  num = （当前页）*limit
+   */
+  UserModel.count().then((count) => {
+    //总条数
+    console.log('count====', count);
+    //计算总页数
+    var totolPages = Math.ceil(count/perPage);
+    //page的最大值
+    page = Math.min(page, totolPages);
+
+    UserModel.find().limit((Number)(perPage)).skip((Number)(page)*perPage).then((users) => {
+      res.json(users);
+    }).catch(next);
+
+  });
+
+});
+
+/**
+ *删除用户信息
+ */
+router.post('/user/del', (req, res, next) => {
+
+  var { username } = req.body;
+  UserModel.find({ username: username })
+        .then(users => {
+
+          return Promise.map(users, (item) => {
+
+            // console.log('item',item);
+            return UserModel.remove({ username: username }, (err, docs) => {
+              console.log('docs===', docs)
+              return docs;
+            });
+
+          });
+
+        })
+        .then(data => {
+          console.log('data', data);
+        });
+
+  res.json('del');
+
+})
+
+/**
+ *修改用户信息
+ */
+router.post('/user/update', (req, res, next) => {
+
+  var { username, newname = '888' } = req.body;
+
+  UserModel.find({ username: username })
+        .then((users) => {
+          console.log('lenght===', users.length)
+
+          if (users.length==0) {
+            responseData.code = 9
+            responseData.message = '未查找到该用户'
+            res.json(responseData);
+
+          } else {
+
+            return Promise.map(users, (item) => {
+
+              var conditions = {
+                username: username
+              }
+
+              return UserModel.update({ username: username }, { username: newname }).then((data) => {
+                console.log('data====', data)
+                return data;
+              });
+
+            });
+
+          }
+
+        }).then(data => res.json(data))
+        .catch(next);
+
+})
 
 module.exports = router;
 
