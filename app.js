@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var sha = require('sha1');
+var blog = require('./src/blog/router/home')
 
 //passport
 var session = require('express-session');
@@ -21,21 +22,22 @@ var soup = require('./src/nsoup');
 var wechat = require('./src/wechatconfig');
 var t1 = require('./src/http');
 
+
 /*//微信公共号接入测试
-var config = {
-  appID: 'wx52e971ef431fdfb2',
-  appSecret: 'aV0QEhwy0kqlTqv03KHJo6oBDPPmAIAhh1CateqrnPa',
-  token: 'lxykad007'
-}*/
+ var config = {
+ appID: 'wx52e971ef431fdfb2',
+ appSecret: 'aV0QEhwy0kqlTqv03KHJo6oBDPPmAIAhh1CateqrnPa',
+ token: 'lxykad007'
+ }*/
 
 var app = express();
 
 
 //连接本地数据库
-// var uri = 'mongodb://localhost/ApiServer';
-// var db =  mongoose.connect(uri, {
-//     useMongoClient: true
-// });
+var uri = 'mongodb://localhost/ApiServer';
+var db =  mongoose.connect(uri, {
+    useMongoClient: true
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -69,34 +71,13 @@ passport.use('local', new LocalStrategy((username, password, done) => {
 
 //wechat
 app.use(wechat);
-/*app.use((req, res, next) => {
-
-  //var {}
-  var token = config.token;
-
-  var signature = req.query.signature;
-  var nonce = req.query.nonce;
-  var timestamp = req.query.timestamp;
-  var echostr = req.query.echostr;
-
-  var str = [ token, timestamp, nonce ].sort().join('');
-  var sha1 = sha(str);
-
-  if (sha1===signature) {
-    console.log("wechat=======success==="+token)
-    res.send(echostr)
-  } else {
-    console.log("wechat=======failure")
-    res.send('wrong')
-  }
-
-})*/
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/opt', opt);
 app.use('/', soup);
-app.use('/',t1);
+app.use('/', t1);
+app.use('/blog',blog);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
