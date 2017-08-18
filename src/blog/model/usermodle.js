@@ -5,4 +5,4 @@
 var mongose = require('mongoose');
 var userSchema = require('../schema/userschema');
 
-module.exports = mongose.model('User', userSchema);
+module.exports = mongose.model('userInfo', userSchema);

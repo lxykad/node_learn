@@ -32,7 +32,7 @@ router.get('/array', function (req, res, next) {
   // }).then((data)=>{
   //   console.log('data====', data);
   // });
-  var user ={name: 'lxy', age: 22}
+  var user = { name: 'lxy', age: 22 }
 
   let sign = jwt.sign(user, 'aaa');
   // console.log('sign====', user);
@@ -45,10 +45,32 @@ router.get('/array', function (req, res, next) {
    * process
    * argv,env,
    */
-  console.log('arch=====',process.arch)
+  console.log('arch=====', process.arch)
 
   res.json('0');
 });
+
+/**
+ * date测试代码
+ */
+router.post('/date/test', (req,res,next) => {
+
+  const nowTime = Date.now();
+  var sendTiem = new Date(2017,7,15,9,40,0);//2017-08-14T03:07:00.000Z
+
+  console.log('nowTime======', nowTime) //1502680394660
+  console.log('sendTiem=====', sendTiem.valueOf())
+
+  var date = new Date(sendTiem);
+
+  console.log('date=====', date) //2017-08-14T03:07:00.000Z
+
+  res.json('date')
+});
+
+/**
+ *
+ */
 
 
 module.exports = router;

@@ -8,6 +8,7 @@ var Promise = require('bluebird');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var app = express();
+var Book = require('../model/bookModel');
 
 // const Promise = require('bluebird');
 // var mongoose = require('mongoose');
@@ -16,7 +17,8 @@ var app = express();
 //返回给前端的统一格式
 var responseData = require('./responseData');
 var UserModel = require('../model/usermodle');
-var userSchema = require('../schema/userschema');
+// var userSchema = require('../schema/userschema');
+var Article = require('../model/articleModel');
 
 /**
  * 注册
@@ -130,7 +132,18 @@ router.get('/all/users', (req, res, next) => {
    * 第一页page == 0
    * limit(number)
    * skip(num):忽略前两条，从第三条开始取  num = （当前页）*limit
+   * sort() 排序  根据id排序，1：升序，-1：降序
+   * populate() 关联字段articleSchema的 articleId
    */
+
+  new Book({
+    name: 'java',
+    price: 90
+  }).save().then(data => {
+    console.log('book===', data);
+
+  });
+
   UserModel.count().then((count) => {
     //总条数
     console.log('count====', count);
@@ -139,7 +152,7 @@ router.get('/all/users', (req, res, next) => {
     //page的最大值
     page = Math.min(page, totolPages);
 
-    UserModel.find().limit((Number)(perPage)).skip((Number)(page)*perPage).then((users) => {
+    UserModel.find().sort({ _id: -1 }).limit((Number)(perPage)).skip((Number)(page)*perPage).populate('articleId').then((users) => {
       res.json(users);
     }).catch(next);
 
@@ -210,6 +223,51 @@ router.post('/user/update', (req, res, next) => {
 
         }).then(data => res.json(data))
         .catch(next);
+
+})
+
+/**
+ * 新增文章
+ */
+
+router.post('/article/add', (req, res, next) => {
+
+  var { title, description, content } = req.body;
+
+
+  //验证
+
+
+  /**
+   * 保存文章到数据库 ,每次save都会产生一条id不同的记录
+   */
+  new Article({ title, description, content }).save().then(result => {
+
+    res.json(result);
+  });
+
+
+  /*
+
+   //修改一篇文章
+   Article.findOne({ description: '哈哈' }).then(articles => {
+
+   articles.content = '文章内容修改了00';
+
+   return articles.save();
+
+   }).then(newArticle => {
+
+   res.json(newArticle);
+   }).catch(err => res.json(err));*/
+
+
+  /*
+
+   // 查询所有
+   Article.find().then(articles => {
+   res.json(articles);
+   })*/
 
 })
 

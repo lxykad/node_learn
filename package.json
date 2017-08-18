@@ -39,6 +39,7 @@
     "session": "^0.1.0",
     "session-file-store": "^1.0.0",
     "sha1": "^1.1.1",
+    "socket.io": "^2.0.3",
     "superagent": "^3.5.2",
     "vhost": "^3.0.2"
   }
