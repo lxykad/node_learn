@@ -11,9 +11,10 @@ io.on('connection',(socket)=>{
 
     socket.on('disconnect',()=>{
         console.log('socket_server=========dicconnect');
+
     });
 });
 
 http.listen(3000,()=>{
-    console.log('socket_server=========port:',3000);
+    // console.log('socket_server=========port:',3000);
 });
