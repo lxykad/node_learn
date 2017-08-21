@@ -73,12 +73,34 @@ router.post('/date/test', (req, res, next) => {
  */
 router.get('/js/test', (req, res, next) => {
 
-  var arr = [ 1, 2, 3 ,4];
+  var arr = [ 1, 2, 3, 4, 3, 2, 4 ];
+
+  // 返回相加结果
   let result = arr.reduce((x, y) => {
     return x+y;
   });
 
-  res.json(result);
+  // 返回 偶数/元素为4 的数组
+  let filter = arr.filter((x) => {
+    // return x%2==0;
+    return x==4;
+  });
+
+  /**
+   * 数组去重
+   * x 数组中的某个元素
+   * index 索引
+   * self 数组本身
+   */
+  let newArr = arr.filter((x, index, self) => {
+    console.log('indexof====', self.indexOf(x));// 0 1 2 3 2 1 3
+    self.indexOf(x);// 2 3 4 3 2 4
+
+    return self.indexOf(x)===index;// [1 2 3 4 ]
+  })
+
+
+  res.json(newArr);
 });
 
 module.exports = router;
