@@ -53,10 +53,10 @@ router.get('/array', function (req, res, next) {
 /**
  * date测试代码
  */
-router.post('/date/test', (req,res,next) => {
+router.post('/date/test', (req, res, next) => {
 
   const nowTime = Date.now();
-  var sendTiem = new Date(2017,7,15,9,40,0);//2017-08-14T03:07:00.000Z
+  var sendTiem = new Date(2017, 7, 15, 9, 40, 0);//2017-08-14T03:07:00.000Z
 
   console.log('nowTime======', nowTime) //1502680394660
   console.log('sendTiem=====', sendTiem.valueOf())
@@ -69,8 +69,16 @@ router.post('/date/test', (req,res,next) => {
 });
 
 /**
- *
+ *js 测试代码
  */
+router.get('/js/test', (req, res, next) => {
 
+  var arr = [ 1, 2, 3 ,4];
+  let result = arr.reduce((x, y) => {
+    return x+y;
+  });
+
+  res.json(result);
+});
 
 module.exports = router;
