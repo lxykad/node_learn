@@ -136,13 +136,13 @@ router.get('/all/users', (req, res, next) => {
    * populate() 关联字段articleSchema的 articleId
    */
 
-  new Book({
-    name: 'java',
-    price: 90
-  }).save().then(data => {
-    console.log('book===', data);
-
-  });
+   // new Book({
+  //   name: 'java',
+  //   price: 90
+  // }).save().then(data => {
+  //   console.log('book===', data);
+  //
+  // });
 
   UserModel.count().then((count) => {
     //总条数
@@ -159,6 +159,29 @@ router.get('/all/users', (req, res, next) => {
   });
 
 });
+
+/**
+ *
+ */
+router.get('/user/list', (req, res, next) => {
+  //查询所有
+  // Book.find()
+  //       .then((users) => {
+  //         res.send(users)
+  //       });
+
+  // UserModel.findOne({ username: 'lxy' })
+  //       .then(user => {
+  //         res.send(user);
+  //       })
+
+  //连表查询
+  UserModel.findOne({ username: 'lxy' }).populate('bookId')
+        .then(user => {
+          res.send(user);
+        })
+
+})
 
 /**
  *删除用户信息

@@ -3,15 +3,21 @@
  *
  */
 'use strict';
-var mongose = require('mongoose');
+var mongoose = require('mongoose');
 
 /**
  * 用户表结构
  */
-module.exports = new mongose.Schema({
+module.exports = new mongoose.Schema({
 
   username: String,
   password: String,
-  token:String
+  token: String,
+
+  //关联的字段
+  bookId: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'bookinfo'
+  }
 
 });
