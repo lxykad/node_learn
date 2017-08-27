@@ -10,7 +10,7 @@ var WeChat = require('./wechat');
 
 //连接本地数据库
 var uri = 'mongodb://localhost/ApiServer';
-var db = mongoose.connect(uri, {
+mongoose.connect(uri, {
   useMongoClient: true
 });
 
@@ -23,13 +23,13 @@ var db = mongoose.connect(uri, {
  */
 
 //schema 以文件形式存储的数据模型骨架，无法通往数据库端
-var studentSchema = mongoose.Schema({
+var studentSchema = new mongoose.Schema({
   name: String,
   age: Number
 });
 
 // model 参数1 为数据库中集合的名字
-var studentModel = db.model("student", studentSchema);
+var studentModel = mongoose.model("student", studentSchema);
 
 //entity 由model创建，也可以操作数据库
 var studentEntity = new studentModel({
@@ -37,21 +37,11 @@ var studentEntity = new studentModel({
   age: 22
 });
 
-//console.log('name========'+studentEntity.name);
-// console.log('age========'+studentEntity.age)
 
 router.get('/query/:id', function (req, res, next) {
 
   let query = req.params;
 
-  // studentEntity.save((err, doc) => {
-  //     if (err) {
-  //         console.log('save===error==' + err)
-  //     } else {
-  //         console.log('save======success===' + doc)
-  //     }
-  // });
-  // db.close();
 
   res.send(query);
 });
@@ -99,7 +89,6 @@ router.get('/del', function (req, res, next) {
   //     console.log('del======success==='+doc)
   //   }
   // });
-  // db.close();
   res.send('del');
 });
 
@@ -118,22 +107,18 @@ router.get('/modify', function (req, res, next) {
       console.log('modify======success==='+doc)
     }
   });
-  db.close();
   res.send('modify');
 });
 
 router.get('/q', function (req, res, next) {
 
-  studentEntity.find('lxy', (err, result) => {
-    if (err) {
-      console.log('q===error=='+err)
-    } else {
-      console.log('q======success==='+result)
-    }
-  });
+  var results = studentModel.find()
+        .then(result => {
+          return result;
+        });
 
-  db.close();
-  res.send('q');
+
+  res.send(results);
 });
 
 //模拟登陆
@@ -167,8 +152,8 @@ router.get('/send/wx', function fun1(req, res, next) {
                   let parse = JSON.parse(data.text);
 
                   var { access_token, expires_in } = parse;
-                 WeChat.sendAll(parse.access_token);
-                 //  WeChat.getTags(parse.access_token);
+                  WeChat.sendAll(parse.access_token);
+                  //  WeChat.getTags(parse.access_token);
                   res.send(parse.access_token);
                   // res.send(access_token);
                 }

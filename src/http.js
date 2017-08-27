@@ -53,10 +53,10 @@ router.get('/array', function (req, res, next) {
 /**
  * date测试代码
  */
-router.post('/date/test', (req,res,next) => {
+router.post('/date/test', (req, res, next) => {
 
   const nowTime = Date.now();
-  var sendTiem = new Date(2017,7,15,9,40,0);//2017-08-14T03:07:00.000Z
+  var sendTiem = new Date(2017, 7, 15, 9, 40, 0);//2017-08-14T03:07:00.000Z
 
   console.log('nowTime======', nowTime) //1502680394660
   console.log('sendTiem=====', sendTiem.valueOf())
@@ -69,8 +69,38 @@ router.post('/date/test', (req,res,next) => {
 });
 
 /**
- *
+ *js 测试代码
  */
+router.get('/js/test', (req, res, next) => {
 
+  var arr = [ 1, 2, 3, 4, 3, 2, 4 ];
+
+  // 返回相加结果
+  let result = arr.reduce((x, y) => {
+    return x+y;
+  });
+
+  // 返回 偶数/元素为4 的数组
+  let filter = arr.filter((x) => {
+    // return x%2==0;
+    return x==4;
+  });
+
+  /**
+   * 数组去重
+   * x 数组中的某个元素
+   * index 索引
+   * self 数组本身
+   */
+  let newArr = arr.filter((x, index, self) => {
+    console.log('indexof====', self.indexOf(x));// 0 1 2 3 2 1 3
+    self.indexOf(x);// 2 3 4 3 2 4
+
+    return self.indexOf(x)===index;// [1 2 3 4 ]
+  })
+
+
+  res.json(newArr);
+});
 
 module.exports = router;
