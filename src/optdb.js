@@ -11,7 +11,7 @@ var WeChat = require('./wechat');
 //连接本地数据库
 var uri = 'mongodb://localhost/ApiServer';
 mongoose.connect(uri, {
-  useMongoClient: true
+    useMongoClient: true
 });
 
 /**
@@ -24,8 +24,8 @@ mongoose.connect(uri, {
 
 //schema 以文件形式存储的数据模型骨架，无法通往数据库端
 var studentSchema = new mongoose.Schema({
-  name: String,
-  age: Number
+    name: String,
+    age: Number
 });
 
 // model 参数1 为数据库中集合的名字
@@ -33,17 +33,17 @@ var studentModel = mongoose.model("student", studentSchema);
 
 //entity 由model创建，也可以操作数据库
 var studentEntity = new studentModel({
-  name: 'lxy',
-  age: 22
+    name: 'lxy',
+    age: 22
 });
 
 
 router.get('/query/:id', function (req, res, next) {
 
-  let query = req.params;
+    let query = req.params;
 
 
-  res.send(query);
+    res.send(query);
 });
 
 router.get('/routetest', function fun1(req, res, next) {
@@ -52,82 +52,106 @@ router.get('/routetest', function fun1(req, res, next) {
         console.log('route====fun1');
         next('err');
         // res.send('fun1');
-      },
-      function fun2(req, res, next) {
+    },
+    function fun2(req, res, next) {
         console.log('route====fun2')
         next();
         //res.send('fun2');
-      },
-      function fun3(req, res, next) {
+    },
+    function fun3(req, res, next) {
 
         console.log('route====fun3')
         // next();
         res.end('fun3');
-      }
+    }
 );
 
 router.get('/process', function fun1(req, res, next) {
 
         //let strings = process.argv;
         process.argv.forEach((val, index) => {
-          console.log(`${index}: ${val}`);
+            console.log(`${index}: ${val}`);
         });
 
 
         res.json(process.argv.slice(2));
         //process.exit(1);
-      }
+    }
 );
 
 
 router.get('/del', function (req, res, next) {
 
-  // studentEntity.save((err, doc) => {
-  //   if (err) {
-  //     console.log('del===error=='+err)
-  //   } else {
-  //     console.log('del======success==='+doc)
-  //   }
-  // });
-  res.send('del');
+    // studentEntity.save((err, doc) => {
+    //   if (err) {
+    //     console.log('del===error=='+err)
+    //   } else {
+    //     console.log('del======success==='+doc)
+    //   }
+    // });
+    res.send('del');
 });
 
 router.get('/modify', function (req, res, next) {
 
-  //第一种修改方式
+    //第一种修改方式
 
 
-  //第二种修改方式
+    //第二种修改方式
 
 
-  studentEntity.save((err, doc) => {
-    if (err) {
-      console.log('modify===error=='+err)
-    } else {
-      console.log('modify======success==='+doc)
-    }
-  });
-  res.send('modify');
+    studentEntity.save((err, doc) => {
+        if (err) {
+            console.log('modify===error==' + err)
+        } else {
+            console.log('modify======success===' + doc)
+        }
+    });
+    res.send('modify');
 });
 
 router.get('/q', function (req, res, next) {
 
-  var results = studentModel.find()
+    var results = studentModel.find()
         .then(result => {
-          return result;
+            return result;
         });
 
 
-  res.send(results);
+    res.send(results);
 });
+
+//测试公共参数 token等
+router.get('/token', function fun1(req, res, next) {
+
+        let body = req.body;
+        let query = req.query;
+        console.log("query===========", req.get('token'));
+
+        res.json(query);
+    }
+);
+
+//测试公共参数 token等
+router.post('/token', function fun1(req, res, next) {
+
+        let body = req.body;
+        let query = req.query;
+        console.log("body===========", req.get('token'));
+    console.log("body===========", req.headers);
+
+        res.json("88");
+    }
+);
+
 
 //模拟登陆
 router.post('/login', function fun1(req, res, next) {
 
-        let { username, pwd } = req.body;
+        let {username, pwd} = req.body;
 
-        res.json({ username, pwd });
-      }
+        res.json({username, pwd});
+    }
 );
 
 //发送消息
@@ -142,23 +166,23 @@ router.get('/send/wx', function fun1(req, res, next) {
         var url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxa682b40e836e5596&secret=73d18cabc87b71003a53bf03a229e914';
 
         request
-              .get(url)
-              .end((err, data) => {
+            .get(url)
+            .end((err, data) => {
                 if (err) {
-                  console.log('token=====err')
-                  res.json(err)
+                    console.log('token=====err')
+                    res.json(err)
                 } else {
-                  console.log('token=====success')
-                  let parse = JSON.parse(data.text);
+                    console.log('token=====success')
+                    let parse = JSON.parse(data.text);
 
-                  var { access_token, expires_in } = parse;
-                  WeChat.sendAll(parse.access_token);
-                  //  WeChat.getTags(parse.access_token);
-                  res.send(parse.access_token);
-                  // res.send(access_token);
+                    var {access_token, expires_in} = parse;
+                    WeChat.sendAll(parse.access_token);
+                    //  WeChat.getTags(parse.access_token);
+                    res.send(parse.access_token);
+                    // res.send(access_token);
                 }
-              })
-      }
+            })
+    }
 );
 
 module.exports = router;
